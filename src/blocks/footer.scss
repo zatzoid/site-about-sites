@@ -1,0 +1,25 @@
+.footer {
+    margin-top: auto;
+    width: 100%;
+
+    height: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    &__container {
+        max-width: 100px;
+        &-author {
+            color: var(--col-black-light);
+            &-link{
+                color: var(--col-red);
+                text-decoration: none;
+                transition: all .2s;
+                opacity: 0.5;
+                &:hover{
+                   opacity: 1;
+                }
+            }
+        }
+    }
+}

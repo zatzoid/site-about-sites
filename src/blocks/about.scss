@@ -1,0 +1,113 @@
+.about {
+
+    width: 100%;
+    max-width: 400px;
+    box-sizing: border-box;
+    margin: 25px auto 50px;
+
+    &__content {
+        box-sizing: border-box;
+        padding: 15px;
+        width: 100%;
+        border-radius: 5px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        position: relative;
+        
+
+        &::after {
+            z-index: -1;
+            position: absolute;
+            content: '';
+            top: -4%;
+            left: -6%;
+            min-width: 110%;
+            min-height: 110%;
+            background-image: url('./assets/paint-bg.png');
+            background-position: center;
+            background-size: contain;
+            background-repeat: no-repeat;
+
+        }
+
+        &-heading {
+            margin-top: 0;
+            font-size: 25px;
+            font-weight: 900;
+            font-family: Rubik Mono One, monospace;
+            color: white;
+        }
+
+        &-data {
+            width: fit-content;
+
+            margin: 5px 0;
+
+            &-nickname {
+                color: var(--col-red);
+                font-size: 15px;
+                margin-left: 5px;
+            }
+
+            &-link {
+                color: var(--col-red);
+                text-decoration: none;
+                transition: all .2s;
+
+                &:hover {
+                    color: white;
+                }
+            }
+
+            &-type {
+                margin: 0;
+                align-self: center;
+                font-weight: 900;
+                font-family: Rubik Mono One, monospace;
+                -webkit-text-stroke: 0.3px #fff;
+                color: transparent;
+            }
+        }
+
+
+
+        &-links {
+            display: flex;
+            gap: 10px;
+
+            &-el {
+                width: 30px;
+                height: 30px;
+                background-position: center;
+                background-size: contain;
+
+                &:hover {
+                    opacity: 0.7;
+                }
+
+                &_tg {
+                    background-image: url('./assets/telegram-circle-blue-logo-16635.svg');
+                }
+
+                &_gh {
+                    background-image: url('./assets/github.svg');
+                    background-color: transparent;
+                    border-radius: 50%;
+                    box-shadow: 0px 0px 0px 2px var(--col-red) inset;
+                }
+            }
+        }
+
+
+
+
+    }
+}
+
+@media screen and (max-width: 400px) {
+
+    .about__content::after{
+     background-image: none;
+    }
+}

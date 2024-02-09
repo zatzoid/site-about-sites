@@ -1,0 +1,74 @@
+@import 'cards.scss';
+@import 'preloader.scss';
+@import 'grid__heading.scss';
+@import 'footer.scss';
+@import 'header.scss';
+@import 'about.scss';
+@import 'bg.scss';
+@import '../node_modules/normalizecss/normalize.css';
+
+
+body {
+    --max-width: 800px;
+    --col-black: rgb(9, 12, 20);
+    background-color: var(--col-black);
+    color: white;
+    --col-yellow: rgb(236, 216, 33);
+    --col-green: rgb(34, 228, 131);
+    --col-blue: rgb(32, 185, 196);
+    --col-black-light: rgb(45, 54, 78);
+    --col-red: #e22076;
+    --col-purple: #2c1853;
+    --col-grey: #586179;
+    --col-grey-light: #aab3ca;
+    font-family: 'Roboto-Regular', Arial, sans-serif;
+    position: relative;
+
+
+}
+
+@mixin bg-blur {
+    background-color: #2c185359;
+    backdrop-filter: blur(10px);
+}
+
+.grid__el-content,
+.grid__heading{
+    @include bg-blur;
+}
+
+.border-yellow {
+    border-color: var(--col-yellow);
+}
+
+.border-green {
+    border-color: var(--col-green);
+}
+
+.border-blue {
+    border-color: var(--col-blue);
+}
+
+.retroWave-head {
+    font-family: "Rubik Mono One", monospace;
+    font-weight: 400;
+    font-style: normal;
+    font-style: italic;
+    letter-spacing: 0.9px;
+    background: rgb(245, 204, 227);
+    background: linear-gradient(0deg, rgba(245, 204, 227, 1) 0%, rgba(170, 26, 87, 1) 36%, rgba(110, 11, 53, 1) 43%, rgba(211, 235, 245, 1) 50%, rgba(67, 180, 207, 1) 60%, rgba(44, 44, 203, 1) 83%, rgba(209, 223, 235, 1) 98%);
+    background-size: 150%;
+    -webkit-text-fill-color: transparent;
+    -webkit-background-clip: text;
+    -webkit-text-stroke: 0.3px white;
+    text-stroke: 0.3px white;
+}
+
+.retroWave-marker {
+    font-style: italic;
+    font-family: "RockSalt-Regular", cursive;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 20px;
+    line-height: 30px;
+}
