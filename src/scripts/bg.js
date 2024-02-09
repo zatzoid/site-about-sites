@@ -13,7 +13,7 @@ $(function () {
             const sunScale = scrollPos <= 800 ? Math.round((1.0 - (0.5 * scrollPos) / 800) * 10) / 10 : 0.5;
             const gridDeg = scrollPos >= 200 ? mapRange(scrollPos, 200, bodyHeight - windowHeight, 0, 35) : 0;
             $(sun).css({ transform: `translate(-50%, -50%)  scale(${sunScale})` })
-            $(grid).css({ transform: `perspective(${bodyHeight * 0.26}px)   rotatex(${gridDeg}deg) translateY(90vh)` })
+            $(grid).css({ transform: `perspective(${bodyHeight * 0.24}px)   rotatex(${gridDeg}deg) translateY(90vh)` })
         })
     } else {
         $(sun).empty()

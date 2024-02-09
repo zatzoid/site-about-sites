@@ -304,6 +304,8 @@
   height: inherit;
   padding-left: 15px;
   color: rgb(243, 240, 240);
+  padding-bottom: 30px;
+  box-sizing: border-box;
 }
 .grid__el-desc-content-link {
   text-decoration: none;
@@ -689,7 +691,19 @@
     opacity: 1;
   }
 }
+@media screen and (max-width: 800px) {
+  .header__logo {
+    top: 0;
+    left: 50%;
+    transform: rotate(-30deg) translate(-30%, -50%);
+  }
+}
 @media screen and (max-width: 400px) {
+  .header__logo {
+    top: 0;
+    left: 50%;
+    transform: rotate(-30deg) translate(-30%, -50%);
+  }
   .header__logo-main-data {
     font-size: 20px;
   }
@@ -852,6 +866,7 @@ body {
   --col-purple: #2c1853;
   --col-grey: #586179;
   --col-grey-light: #aab3ca;
+  --col-unknown: #d220e2;
   font-family: "Roboto-Regular", Arial, sans-serif;
   position: relative;
 }

@@ -112,16 +112,12 @@ export default class Card {
             case 'vue': return 'green';
             case 'javascript': return 'yellow';
             case 'react': return 'blue'
-            default: return 'unknow'
+            default: return 'unknown'
         }
     }
     _setUniqueEffects() {
         const color = this._getColor();
-        /*   $(this._cardContent).addClass(`border-${color}`);
-          $(this._cardContent).find('.grid__el-desc-content').addClass(`border-${color}`); */
-        /*  $(this._cardContent).find('.grid__el-desc-lang').addClass(`border-${color}`); */
         $(this._cardContent).find('.grid__el-desc-lang').css({ color: `var(--col-${color})` });
-        //#e22076
 
     }
     _AddHeadingLink(url, text, title) {
@@ -142,14 +138,11 @@ export default class Card {
             const markedText = marked.parse(decodedRM);
             const newText = markedText.replace(/<h1/g, '<h3').replace(/<\/h1>/g, '</h3>');
             /* link gh page */
-            const linkList = $(newText).find('a').toArray();
-            const getGHlink = linkList.filter((el) =>
-                el.href.includes('github.io')
-            );
+            const getGHlink = this._cardData.homepage
             /* add link to img */
             if (getGHlink.length > 0) {
-                $(this._cardImg).wrap(`<a href=${getGHlink[0].href} target='_blank' class='grid__el-img-link'></a>`)
-                this._AddHeadingLink(getGHlink[0].href, 'ghPage', "ссылка на версию сайта выложенную на GitHub Page")
+                $(this._cardImg).wrap(`<a href=${getGHlink} target='_blank' class='grid__el-img-link'></a>`)
+                this._AddHeadingLink(getGHlink, 'ghPage', "ссылка на версию сайта выложенную на GitHub Page")
             }
 
             $(this._cardDesc).append(newText);
