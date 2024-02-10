@@ -1,7 +1,6 @@
 import $, { error } from "jquery";
 import './index.css';
 import './fonts/fonts.css';
-import './scripts/header.js';
 import './scripts/bg.js';
 import { api } from "./scripts/API";
 import Section from "./scripts/Section";
