@@ -79,6 +79,8 @@ export default class Card {
             $(this._cardContent).trigger('mouseleave');
             if (checkbox.target.checked) {
                 $(this._cardDate).parent().css({ paddingLeft: `${(this._cardLang)[0].offsetWidth + 30}px` })
+            }else{
+                $(this._cardDate).parent().css({ paddingLeft: `15px` })
             }
 
         });
@@ -140,9 +142,14 @@ export default class Card {
             /* link gh page */
             const getGHlink = this._cardData.homepage
             /* add link to img */
-            if (getGHlink.length > 0) {
+            if (getGHlink) {
                 $(this._cardImg).wrap(`<a href=${getGHlink} target='_blank' class='grid__el-img-link'></a>`)
-                this._AddHeadingLink(getGHlink, 'ghPage', "ссылка на версию сайта выложенную на GitHub Page")
+
+                if (getGHlink.includes('.github.io')) {
+                    this._AddHeadingLink(getGHlink, 'ghPage', "ссылка на версию сайта выложенную на GitHub Page")
+                } else {
+                    this._AddHeadingLink(getGHlink, 'Site', "ссылка на версию сайта выложенную где то")
+                }
             }
 
             $(this._cardDesc).append(newText);
@@ -152,7 +159,14 @@ export default class Card {
 
         }
         catch (e) {
-            $(this._cardDescText).text(`Ошибка при загрузке описания ${e}`)
+            if (e === 404) {
+                $(this._cardDescText).text(`Ошибка 404. Описание отсуствует`)
+            } else if (e === 403) {
+                $(this._cardDescText).text(`Ошибка 403. Превышен лимит запросов, попробуйте позже`)
+            } else {
+                $(this._cardDescText).text(`Ошибка при загрузке описания ${e}`)
+            }
+
             $(this._cardDesc).append(this._cardDescText);
             $(this._cardDesc).find(this._cardDescPreloader).remove()
             $(this._cardBtn).attr('disabled', false)

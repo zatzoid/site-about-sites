@@ -7,13 +7,6 @@ import { api } from "./scripts/API";
 import Section from "./scripts/Section";
 import Card from "./scripts/Card";
 
-// обернуть заголовок в ссылку на репозиторий
-// добавить к нему и к изображению икноку гитхаба
-
-//футер с автором
-// хэдэр с анимированным названием
-
-// мобилка
 
 let repoList
 

@@ -23,3 +23,9 @@
     font-style: normal;
     font-weight: normal;
 }
+@font-face {
+    font-family: 'RubikMonoOne-Regular';
+    src: url('./RubikMonoOne-Regular.ttf') format('truetype');
+    font-style: bold;
+    font-weight: bold;
+}

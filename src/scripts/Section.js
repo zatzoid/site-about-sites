@@ -30,8 +30,13 @@ export default class Section {
         $(this._cardContainer).find(this._sectionPreloader).remove();
     }
     sectionApiError(error) {
+        if(error === 403){
+            $(this._sectionErrorMsg).find('.grid__el-error-msg').text(`Ошибка 403. Превышен лимит запросов, попробуйте позже`)
 
-        $(this._sectionErrorMsg).find('.grid__el-error-msg').text(`Ошибка при запросе репозиториев- ${error}`)
+        }else{
+            $(this._sectionErrorMsg).find('.grid__el-error-msg').text(`Ошибка: ${error}`)
+        }
+
         $(this._cardContainer).append(this._sectionErrorMsg);
         $(this._sectionErrorMsg).show()
     }
