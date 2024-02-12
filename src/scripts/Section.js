@@ -13,7 +13,7 @@ export default class Section {
         <a target='_blank' href='https://github.com/zatzoid'> Github</a>
         </p>
         
-        </li>`)
+        </li>`);
         this._sectionFindReset = $('.grid__filter-find-btn-reset');
         this._sectionFindInput = $('.grid__filter-find-input');
         this._sectionFindSelect = $('.grid__filter-sort');
@@ -88,8 +88,8 @@ export default class Section {
 
     }
     _searchElements(data) {
+       
         if (data.length > 0) {
-           
             $(this._sectionFindReset).addClass('grid__filter-find-btn-reset_active')
             const filterParam = () => {
                 if (data.toLowerCase() === 'js') {
@@ -108,19 +108,18 @@ export default class Section {
             const combinedList = Array.from(newFiltedList);
             this._filtedList = combinedList
             this._cardContainer.empty()
-            console.log(combinedList.length > 0);
             if (combinedList.length > 0) {
                 this._setRepoVisibleCount(combinedList)
                 combinedList.forEach(el => {
                     this.renderItem(this._createCard(el))
                 })
             } else {
-                $(this._sectionErrorMsg).find('.grid__el-error').text(`Ничего не найдено`);
-                $(this._sectionErrorMsg).find('.grid__el-error-save').hide()
+                $(this._sectionErrorMsg).find('.grid__el-error-msg').text(`Ничего не найдено`);
                 $(this._cardContainer).append(this._sectionErrorMsg);
                 this._setRepoVisibleCount([])
             }
         } else {
+            this._filtedList = this._repoList
             $(this._sectionFindReset).removeClass('grid__filter-find-btn-reset_active')
             this._cardContainer.empty()
             this._repoList.forEach(el => {

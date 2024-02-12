@@ -89,9 +89,9 @@ export default class Card {
             $(this._cardBtn).off('click', openCard);
         }
         $(this._cardBtn).on('click', openCard);
-        $(this._cardMain).on('click', () => {
+     /*    $(this._cardMain).on('click', () => {
             console.log(this._cardData);
-        })
+        }) */
 
         $(this._cardContent).hover(() => {
             if ($(this._cardBtn)[0].checked === false) {
