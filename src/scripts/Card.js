@@ -67,7 +67,7 @@ export default class Card {
             const createDate = new Date(date);
             return `${String(createDate.getDate()).padStart(2, '0')}-${String(createDate.getMonth() + 1).padStart(2, '0')}-${createDate.getFullYear()}`
         }
-        $(this._cardDate[0]).text(`создан: ${date(this._cardData.updated_at)}`);
+        $(this._cardDate[0]).text(`создан: ${date(this._cardData.created_at)}`);
         $(this._cardDate[1]).text(`обновлен: ${date(this._cardData.pushed_at)}`);
 
 
