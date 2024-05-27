@@ -15,7 +15,6 @@ html{
 body {
     --max-width: 800px;
     --col-black: rgb(17, 12, 24);
-    color: white;
     --col-yellow: rgb(236, 216, 33);
     --col-green: rgb(34, 228, 131);
     --col-blue: rgb(32, 185, 196);
@@ -26,10 +25,20 @@ body {
     --col-grey: #586179;
     --col-grey-light: #aab3ca;
     --col-unknown: #d220e2;
+
     font-family: 'Roboto-Regular', Arial, sans-serif;
-    position: relative;
     overflow-x: hidden;
 
+}
+.root{
+    position: relative;
+    color: white;
+    width: 100%;
+    height: 100%;
+    background-image: url('./assets/stars.png');
+    background-position: top;
+    background-repeat: repeat-y;
+    background-color: var(--col-black);
 }
 
 @mixin bg-blur {
