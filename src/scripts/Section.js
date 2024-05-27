@@ -24,26 +24,37 @@ export default class Section {
 
     }
     showSectionPreloader() {
-        $(this._cardContainer).append(this._sectionPreloader);
+        this._cardContainer.empty()
+        this._cardContainer.append(this._sectionPreloader);
     }
     hideSectionPreloader() {
         $(this._cardContainer).find(this._sectionPreloader).remove();
     }
     sectionApiError(error) {
-        if(error === 403){
+        if (error === 403) {
             $(this._sectionErrorMsg).find('.grid__el-error-msg').text(`Ошибка 403. Превышен лимит запросов, попробуйте позже`)
 
-        }else{
+        } else {
             $(this._sectionErrorMsg).find('.grid__el-error-msg').text(`Ошибка: ${error}`)
         }
 
         $(this._cardContainer).append(this._sectionErrorMsg);
         $(this._sectionErrorMsg).show()
     }
-    renderItem(item) {
-        $(this._cardContainer).append(item);
-        this.hideSectionPreloader()
-        this._setPosition(item);
+    //repos[]
+    renderItems(repos) {
+        this.hideSectionPreloader();
+       
+        this._setRepoLoadCount(repos);
+        repos.forEach((el) => {
+            const item = this._createCard(el)
+            $(this._cardContainer).append(item);
+            this._setPosition(item);
+
+        })
+
+
+
 
     }
     putRepoList(list) {
@@ -88,45 +99,34 @@ export default class Section {
 
     }
     _searchElements(data) {
-       
+
+
         if (data.length > 0) {
+
+
             $(this._sectionFindReset).addClass('grid__filter-find-btn-reset_active')
-            const filterParam = () => {
-                if (data.toLowerCase() === 'js') {
-                    return 'javascript'
-                } else {
-                    return data.toLowerCase()
-                }
-            }
-            const filteredListLang = this._filtedList.filter((el) => {
-                return el.language.toLowerCase().includes(filterParam());
+            const filterParam = data.toLowerCase() === 'js' ? 'javascript' : data.toLowerCase()
+            const newFiltedList = this._filtedList.filter((el) => {
+                return el.language.toLowerCase().includes(filterParam) || el.name.toLowerCase().includes(filterParam);
             });
-            const filtedListName = this._filtedList.filter((el) => {
-                return el.name.toLowerCase().includes(data.toLowerCase());
-            });
-            const newFiltedList = new Set([...filteredListLang, ...filtedListName]);
-            const combinedList = Array.from(newFiltedList);
-            this._filtedList = combinedList
+
+            this._filtedList = newFiltedList
             this._cardContainer.empty()
-            if (combinedList.length > 0) {
-                this._setRepoVisibleCount(combinedList)
-                combinedList.forEach(el => {
-                    this.renderItem(this._createCard(el))
-                })
+            if (newFiltedList.length > 0) {
+                this.renderItems(newFiltedList)
             } else {
                 $(this._sectionErrorMsg).find('.grid__el-error-msg').text(`Ничего не найдено`);
                 $(this._cardContainer).append(this._sectionErrorMsg);
                 this._setRepoVisibleCount([])
             }
         } else {
+
+            console.log(this._filtedList, this._repoList);
             this._filtedList = this._repoList
             $(this._sectionFindReset).removeClass('grid__filter-find-btn-reset_active')
             this._cardContainer.empty()
-            this._repoList.forEach(el => {
-                this.renderItem(this._createCard(el))
+            this.renderItems(this._repoList)
 
-            })
-            this._setRepoVisibleCount(this._repoList)
 
         }
     }
@@ -138,9 +138,7 @@ export default class Section {
                 return bDate - aDate
             });
             this._cardContainer.empty();
-            newList.forEach(el => {
-                this.renderItem(this._createCard(el))
-            })
+            this.renderItems(newList)
         } else if (data === 'dateUpd') {
             const newList = this._filtedList.sort((a, b) => {
                 const aDate = Date.parse(a.pushed_at);
@@ -148,23 +146,19 @@ export default class Section {
                 return bDate - aDate
             });
             this._cardContainer.empty();
-            newList.forEach(el => {
-                this.renderItem(this._createCard(el))
-            })
+            this.renderItems(newList)
         } else if (data === 'lang') {
             const newList = this._filtedList.sort((a, b) => {
 
                 return a.language.localeCompare(b.language)
             });
             this._cardContainer.empty();
-            newList.forEach(el => {
-                this.renderItem(this._createCard(el))
-            })
+            this.renderItems(newList)
         }
 
 
     }
-    setRepoLoadCount(list) {
+    _setRepoLoadCount(list) {
         $(this._sectionRepoCountLoad).text(`Загружено репозиториев: ${list.length}`)
 
     }

@@ -9,43 +9,80 @@ import Card from "./scripts/Card";
 
 let repoList
 
+
+
+
+
+
 const createCard = (cardData) => {
 
-    const cardObj = new Card(cardData, getReadeMe, moveCards,  getRepoContent, );
+    const cardObj = new Card(cardData, getReadeMe, moveCards, getRepoContent,);
     const cardEl = cardObj.createCard();
     return cardEl
 }
 const section = new Section(createCard);
 
-async function getAllRepo() {
+getAllRepo(localStorage.getItem('repos'));
+$('.grid__refresh').on('click', ()=>getAllRepo());
+$('.footer__container-sunset').on('change', sunset)
+checkTimeLocalStorrage();
+
+// сделать кнопку рефреша
+async function getAllRepo(localSttore = null) {
     try {
-        section.showSectionPreloader();
-        const repoResponse = await api.getAllRepos();
-        /* загрузка изображений и внедрение ссылок на них в объекты */  
-        const repoListUPDcontent = await Promise.all(
-            repoResponse.map(async (repo) => {
-                const contentData = await api.getRepoContent(repo.name);
-                const hasPrevieImg = contentData.find(el => el.name.toLowerCase() === 'preview.jpg');
-                if (hasPrevieImg) {
-                    const currentRepo = repoResponse.find(el => el.id === repo.id);
-                    const index = repoResponse.findIndex(el => el.id === currentRepo.id);
-                    currentRepo.previewImg
-                    currentRepo.previewImg = hasPrevieImg.download_url;
-                    repoResponse[index] = currentRepo
+        loading()
 
+        const ls = localSttore
+
+
+
+        if (!ls) {
+
+            repoList = await api.getAllRepos();
+            let prevNewId = 0
+            let currNewDate = repoList[0].pushed_at
+            for (let i = 0; i < repoList.length; i++) {
+
+                if (repoList[i].pushed_at > currNewDate) {
+                    currNewDate = repoList[i].pushed_at
+                    prevNewId = i
                 }
-            }))
 
-        repoResponse.forEach(el => {
-            checkLanguage(el)
+                new Promise(async (resolve, reject) => {
+                    await api.getRepoPreviewImg(repoList[i].name)
+                        .then((res) => {
+                            resolve(res)
+                        }).catch((e) => {
+                            reject(`repo: ${repoList[i].name}, dosent have prview img`)
+                        })
 
-        })
-        repoList = repoResponse;
-        section.setRepoLoadCount(repoList);
-        repoList.forEach(el => {
-            section.renderItem(createCard(el))
-        });
-        section.putRepoList(repoList);
+
+                }).then((res) => {
+
+                    repoList[i] = { ...repoList[i], previewImg: res.download_url }
+                    localStorage.setItem('repos', JSON.stringify(repoList))
+                    const domEl = $(`li.grid__el[data-index="${repoList[i].id}"]`);
+
+                    if (domEl) {
+                        domEl.find('.grid__el-img-data').attr('src', res.download_url)
+                    }
+                }).catch((e) => {
+                    console.log(e);
+                })
+
+            }
+
+            repoList[prevNewId].newest
+            repoList[prevNewId].newest = true
+
+
+        } else {
+            repoList = await JSON.parse(ls)
+        }
+
+
+        section.renderItems(repoList)
+        section.putRepoList(repoList)
         section.setSectionListeners()
 
 
@@ -60,6 +97,34 @@ async function getAllRepo() {
     }
 }
 
+function checkTimeLocalStorrage() {
+    //Отчистка ls после 10 дней
+    const ls = localStorage.getItem('date')
+
+    const date = new Date();
+    const str = date.toISOString().split('T')[0].split('-').slice(1)
+    const curDaySumm = str.reduce((acc, curr) => {
+        if (acc <= 0) {
+            curr = curr * 30
+        }
+        acc = Number(curr) + acc
+        return acc
+    }, 0)
+    if (!ls) {
+
+        localStorage.setItem('date', JSON.stringify(curDaySumm))
+    } else if (ls - curDaySumm > 10 || ls - curDaySumm > 10) {
+        localStorage.clear()
+        localStorage.setItem('date', JSON.stringify(curDaySumm))
+    }
+}
+function sunset(evt) {
+    $('.grid__el').toArray().forEach((el) => {
+        $(el).css({ opacity: `${evt.target.checked ? 0 : 1}` })
+    })
+    $('.grid__heading-placeholder').css({ opacity: `${evt.target.checked ? 0 : 1}` })
+}
+
 function getReadeMe(repo) {
     return api.getRepoReadMe(repo)
 }
@@ -69,32 +134,12 @@ function getRepoContent(repo) {
 function moveCards() {
     section.moveAllCards();
 }
-
-function checkLanguage(el) {
-    if (el.language === 'JavaScript') {
-        const checkName = ['React', 'BudgetBuddy', 'Vue'];
-        let matchName
-        for (let i = 0; i < checkName.length; i++) {
-            if (el.name.toLowerCase().includes(checkName[i].toLowerCase())) {
-                matchName = checkName[i]
-                break
-            }
-        }
-
-        if (matchName) {
-            const lang = matchName === 'BudgetBuddy' ? 'React' : matchName
-            el.language = lang;
-            return el
-        }
-
-
-    } else {
-        return el
-    }
+function loading() {
+    $('.grid__refresh').attr('dissabled', true);
+    section.showSectionPreloader();
 }
 
 
-getAllRepo();
 
 
-/* console.log(decodeURIComponent(escape(atob()))) */
+

@@ -3,11 +3,12 @@
   "version": "0.0.1",
   "description": "site",
   "main": "main.js",
+  "homepage": "http://zatzoid.github.io.site-about-sites",
   "scripts": {
     "build": "webpack --mode production",
     "dev": "webpack serve",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d build",
+    "deploy": "gh-pages -d dist",
     "sass": "sass --watch src/blocks/index.scss:src/index.css"
   },
   "author": "me",

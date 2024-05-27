@@ -20,12 +20,12 @@ class API {
             .then(this._errorCheck)
 
     }
-    getRepoContent(repo){
-        return fetch(`https://api.github.com/repos/${this._user}/${repo}/contents`, {
+    getRepoPreviewImg(repo) {
+        return fetch(`https://api.github.com/repos/${this._user}/${repo}/contents/preview.jpg`, {
             method: 'GET',
             headers: this._headers
         })
-            .then(this._errorCheck)  
+            .then(this._errorCheck)
     }
     getRepoReadMe(repo) {
         return fetch(`https://api.github.com/repos/${this._user}/${repo}/contents/README.md`, {
@@ -33,7 +33,7 @@ class API {
             headers: this._headers
         }).then(this._errorCheck)
     }
-  
+
 
 
 
@@ -45,9 +45,9 @@ export const api = new API({
     headers: {
         'Content-Type': 'application/json',
         "Authorization": "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"
-       
+
     }
 
 })
- /* 'accept': 'application/vnd.github.VERSION.raw' */
+/* 'accept': 'application/vnd.github.VERSION.raw' */
 

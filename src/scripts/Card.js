@@ -19,8 +19,9 @@ export default class Card {
             <div class='grid__el-content '>
         
                 <div class='grid__el-date'> 
-                    <p class="grid__el-date-data"></p>
-                    <p class="grid__el-date-data"></p>
+                    <p class="grid__el-date-data "></p>
+                    <p class="grid__el-date-data "></p>
+                    <p class="grid__el-date-data grid__el-date-data_newest"></p>
                 </div>
                 <button class="grid__el-showMore-btn">
                     <label class="grid__el-showMore-btn-label">
@@ -31,7 +32,7 @@ export default class Card {
                         </div>
                     </label>
                 </button>
-                <div class="grid__el-img">
+                <div class="grid__el-img scrollBar">
                     <img class="grid__el-img-data" src="." alt="alt">
                 </div>
                 <div class="grid__el-desc">
@@ -41,8 +42,9 @@ export default class Card {
                     <div class="grid__el-desc-content">
                     <div class='grid__el-desc-content-heading'>
                         <h2 class="grid__el-desc-content-heading-name retroWave-head"></h2>
+                        <div class="grid__el-desc-content-heading-links"> </div>
                         </div>
-                        <div class="grid__el-desc-content-body"> </div>
+                        <div class="grid__el-desc-content-body scrollBar"> </div>
                     </div>
                 </div>
 
@@ -53,7 +55,8 @@ export default class Card {
         this._cardDescText = $(`<p class="grid__el-desc-content-body-data"></p>`);
         this._cardDescLink = $(`<a href="#" class="grid__el-desc-content-link"></a>`);
         this._cardDescPreloader = $(`<div class="preloader"></div>`);
-        this._cardHeadingLink = `<a href='#' target='_blank' class='grid__el-desc-content-heading-link retroWave-marker' ></a>`
+        this._cardHeadingLink = `<a href='#' target='_blank' class='grid__el-desc-content-heading-link ' > </a>`
+        this._cardColor = this._getColor()
 
     }
     _setCardValue() {
@@ -61,7 +64,7 @@ export default class Card {
         this._cardName.text(this._cardData.name);
         this._cardName.attr('title', this._cardData.name);
         this.cardDom.attr('data-index', this._cardData.id);
-        this._AddHeadingLink(this._cardData.html_url, 'ghRepo', "ссылка на репозиторий")
+        this._AddHeadingLink(this._cardData.html_url, 'GitHub', "ссылка на репозиторий")
 
         const date = (date) => {
             const createDate = new Date(date);
@@ -69,7 +72,9 @@ export default class Card {
         }
         $(this._cardDate[0]).text(`создан: ${date(this._cardData.created_at)}`);
         $(this._cardDate[1]).text(`обновлен: ${date(this._cardData.pushed_at)}`);
-
+        if (this._cardData.newest) {
+            $(this._cardDate[2]).text(`Newest`).css({ color: `var(--col-${this._cardColor})` });
+        }
 
     }
     _setEventListeners() {
@@ -79,7 +84,7 @@ export default class Card {
             $(this._cardContent).trigger('mouseleave');
             if (checkbox.target.checked) {
                 $(this._cardDate).parent().css({ paddingLeft: `${(this._cardLang)[0].offsetWidth + 30}px` })
-            }else{
+            } else {
                 $(this._cardDate).parent().css({ paddingLeft: `15px` })
             }
 
@@ -89,9 +94,9 @@ export default class Card {
             $(this._cardBtn).off('click', openCard);
         }
         $(this._cardBtn).on('click', openCard);
-     /*    $(this._cardMain).on('click', () => {
-            console.log(this._cardData);
-        }) */
+        /*    $(this._cardMain).on('click', () => {
+               console.log(this._cardData);
+           }) */
 
         $(this._cardContent).hover(() => {
             if ($(this._cardBtn)[0].checked === false) {
@@ -114,28 +119,39 @@ export default class Card {
             case 'vue': return 'green';
             case 'javascript': return 'yellow';
             case 'react': return 'blue'
+            case 'typescript': return 'dark-blue'
             default: return 'unknown'
         }
     }
     _setUniqueEffects() {
-        const color = this._getColor();
-        $(this._cardContent).find('.grid__el-desc-lang').css({ color: `var(--col-${color})` });
+        $(this._cardContent).find('.grid__el-desc-lang').css({ color: `var(--col-${this._cardColor})` });
 
     }
     _AddHeadingLink(url, text, title) {
         const newLink = $(this._cardHeadingLink)
-        $(newLink).attr('href', url);
-        $(newLink).attr('title', title);
-        $(newLink).text(text);
-        $(newLink).css({ color: `var(--col-${this._getColor()})` })
-        $(this._cardHeadingContainer).append(newLink)
+        newLink.attr('href', url);
+        newLink.attr('title', title);
+        newLink.text(text);
+        newLink.append(`<span class='linkTo-image'></span>`)
+        this._cardNameLinks.append(newLink)
     }
     async _setRepoInfo() {
+        let ls = localStorage.getItem('readMe');
+        if (ls) {
+            ls = await JSON.parse(ls);
+        } else {
+            ls = {}
+        }
 
         try {
             $(this._cardBtn).attr('disabled', true)
             $(this._cardDesc).append(this._cardDescPreloader)
-            const readMeFile = await this._getReadeMe(this._cardData.name);
+
+            const readMeFile = ls[this._cardData.id] ? ls[this._cardData.id] : await this._getReadeMe(this._cardData.name);
+            if (!ls[this._cardData.id]) {
+                ls = { ...ls, [this._cardData.id]: readMeFile }
+                localStorage.setItem('readMe', JSON.stringify(ls));
+            }
             const decodedRM = decodeURIComponent(escape(atob(readMeFile.content)));
             const markedText = marked.parse(decodedRM);
             const newText = markedText.replace(/<h1/g, '<h3').replace(/<\/h1>/g, '</h3>');
@@ -143,10 +159,10 @@ export default class Card {
             const getGHlink = this._cardData.homepage
             /* add link to img */
             if (getGHlink) {
-                $(this._cardImg).wrap(`<a href=${getGHlink} target='_blank' class='grid__el-img-link'></a>`)
+                //$(this._cardImg).wrap(`<a href=${getGHlink} target='_blank' class='grid__el-img-link'></a>`)
 
                 if (getGHlink.includes('.github.io')) {
-                    this._AddHeadingLink(getGHlink, 'ghPage', "ссылка на версию сайта выложенную на GitHub Page")
+                    this._AddHeadingLink(getGHlink, 'Page', "ссылка на версию сайта выложенную на GitHub Page")
                 } else {
                     this._AddHeadingLink(getGHlink, 'Site', "ссылка на версию сайта выложенную где то")
                 }
@@ -154,7 +170,7 @@ export default class Card {
 
             $(this._cardDesc).append(newText);
             $(this._cardDesc).find('a')
-                .css({ color: `var(--col-${this._getColor()})` })
+                .css({ color: `var(--col-${this._cardColor})` })
                 .addClass('grid__el-desc-content-link')
 
         }
@@ -176,6 +192,12 @@ export default class Card {
             $(this._cardBtn).attr('disabled', false)
         }
     }
+    /*  setCardPreviewImage(link) {
+         //string
+         $(this._cardImg).attr('src', link)
+         this._cardData.previewImg
+         this._cardData.previewImg = link
+     } */
 
 
     _setRepoImg() {
@@ -195,6 +217,7 @@ export default class Card {
         this._cardLang = this.cardDom.find('.grid__el-desc-lang-data');
         this._cardHeadingContainer = this.cardDom.find('.grid__el-desc-content-heading');
         this._cardName = this.cardDom.find('.grid__el-desc-content-heading-name');
+        this._cardNameLinks = this.cardDom.find('.grid__el-desc-content-heading-links');
         this._cardImg = this.cardDom.find('.grid__el-img-data');
         this._cardBtn = this.cardDom.find('.grid__el-showMore-btn-input');
         this._cardMain = this.cardDom.find('.grid__el').prevObject[0];

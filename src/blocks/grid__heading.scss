@@ -1,3 +1,18 @@
+@keyframes rotate {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+
+
+
+
+}
+
+
 .grid__heading {
 
 
@@ -16,15 +31,14 @@
     &-content {
         max-width: var(--max-width);
         width: 100%;
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(200px, 30%));
-        grid-auto-rows: auto;
-        gap: 10px 0;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px 5px;
         margin: auto;
     }
 
     &_fixed {
-        z-index: 9;
+        z-index: 12;
         position: fixed;
         width: 100%;
         left: 0;
@@ -39,15 +53,12 @@
 
 }
 
-
 .grid__filter {
     border: 1px solid var(--col-grey);
     padding: 5px 10px;
     height: 100%;
     max-height: 30px;
-    width: 100%;
-    min-width: 150px;
-    max-width: 200px;
+    width: 220px;
     background-color: var(--col-purple);
     transition: all .2s;
     box-sizing: border-box;
@@ -75,6 +86,7 @@
             position: relative;
             z-index: 5;
             font-size: 13px;
+
 
             &:focus {
                 outline: none;
@@ -156,10 +168,34 @@
 
 }
 
+.grid__refresh {
+    margin-left: 10px;
+    padding: 0;
+    border: none;
+    display: flex;
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+    background-color: transparent;
+    transition: all .5s;
+
+    &:disabled {
+        opacity: 0.7;
+        cursor: default;
+        animation: rotate 1s linear infinite normal;
+
+    }
+
+    &:hover {
+        opacity: 0.7;
+        transform: rotate(30deg);
+    }
+}
+
 @media screen and (max-width: 810px) {
     .grid__heading {
         &_fixed {
-            z-index: 9;
+            z-index: 12;
             position: relative;
             width: 100%;
             max-width: 100%;

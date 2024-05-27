@@ -1,31 +1,50 @@
 import $ from "jquery";
 const sun = '.bg__sun';
-const grid = '.bg__grid';
-const city = '.bg__city';
-const container = '.bg'
+const bright = '.bg__sun-content-bright'
+const gradient = '.footer__bg-gradientTop'
 
 $(function () {
-/*     const documentHeight = $(document).height() */
+
     if (window.innerWidth >= 800) {
 
         $(document).on('scroll', (evt) => {
-           
-                const bodyHeight = evt.currentTarget.body.offsetHeight;
-                const scrollPos = window.scrollY;
-                const windowHeight = window.screen.height;
-                const sunScale = scrollPos <= 800 ? Math.round((1.0 - (0.5 * scrollPos) / 800) * 10) / 10 : 0.5;
-                const gridDeg = scrollPos >= 200 ? mapRange(scrollPos, 200, bodyHeight - windowHeight, 0, 35) : 0;
-                $(sun).css({ transform: `translate(-50%, -50%)  scale(${sunScale})` })
-                $(grid).css({ transform: `perspective(${bodyHeight * 0.24}px)   rotatex(${gridDeg}deg) translateY(90vh)` })
-          
+
+
+            const scrollPos = window.scrollY;
+            const documentHeight = document.documentElement.scrollHeight; // Высота всего документа
+            const pos = (((scrollPos + window.innerHeight) / documentHeight) * 100).toFixed(0); // Высота видимой области окна
+            //  стратовый размер 0.5
+            // конечный размер 1
+
+            //стартовый top 90%
+            // конечный top 55%
+
+            const sunScale = pos > 50 ? pos / 100 : 0.5
+            const sunTop = 90 - ((pos - 44) / (100 - 44)) * (90 - 55)
+            $(sun).css({ transform: `translate(-50%, -50%)  scale(${sunScale})`, top: `calc(${sunTop}%)` });
+            $(bright).css({
+                opacity: `${pos / 100}`
+            })
+            function grad() {
+                if (pos <= 90) {
+                    return 43;
+                } else if (pos >= 100) {
+                    return 0;
+                } else {
+                    // Линейная интерполяция между 90 и 100
+                    return 43 - ((pos - 90) / (100 - 90)) * 43;
+                }
+            }
+
+            $(gradient).css({ transform: `translateY(${grad()}%)` })
+
         })
     } else {
-        $(sun).empty()
+        $(bright).css({display: 'none'})
     }
 
 });
 
-function mapRange(value, inMin, inMax, outMin, outMax) {
-    return ((value - inMin) * (outMax - outMin)) / (inMax - inMin) + outMin;
-}
+
+
 

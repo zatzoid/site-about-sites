@@ -8,23 +8,27 @@
 @import '../node_modules/normalizecss/normalize.css';
 
 
+html{
+    //какая то хуйня на мобилке вылазит за пределы
+    overflow-x: hidden;
+}
 body {
     --max-width: 800px;
-    --col-black: rgb(9, 12, 20);
-    background-color: var(--col-black);
+    --col-black: rgb(17, 12, 24);
     color: white;
     --col-yellow: rgb(236, 216, 33);
     --col-green: rgb(34, 228, 131);
     --col-blue: rgb(32, 185, 196);
+    --col-dark-blue: rgb(16, 81, 201);
     --col-black-light: rgb(45, 54, 78);
-    --col-red: #e22076;
-    --col-purple: #2c1853;
+    --col-red: #c43d7a;
+    --col-purple: #210f46;
     --col-grey: #586179;
     --col-grey-light: #aab3ca;
     --col-unknown: #d220e2;
     font-family: 'Roboto-Regular', Arial, sans-serif;
     position: relative;
-
+    overflow-x: hidden;
 
 }
 
@@ -34,7 +38,7 @@ body {
 }
 
 .grid__el-content,
-.grid__heading{
+.grid__heading {
     @include bg-blur;
 }
 
@@ -52,8 +56,8 @@ body {
 
 .retroWave-head {
     font-family: "RubikMonoOne-Regular", monospace;
-   font-weight: bold;
-    font-style: italic; 
+    font-weight: bold;
+    font-style: italic;
     letter-spacing: 0.9px;
     background: rgb(245, 204, 227);
     background: linear-gradient(0deg, rgba(245, 204, 227, 1) 0%, rgba(170, 26, 87, 1) 36%, rgba(110, 11, 53, 1) 43%, rgba(211, 235, 245, 1) 50%, rgba(67, 180, 207, 1) 60%, rgba(44, 44, 203, 1) 83%, rgba(209, 223, 235, 1) 98%);
@@ -71,4 +75,35 @@ body {
     font-style: normal;
     font-size: 20px;
     line-height: 30px;
+}
+
+.linkTo-image {
+    display: block;
+    width: 15px;
+    height: 15px;
+    max-height: 100%;
+    background-image: url('./assets/linkTo.svg');
+    background-position: center;
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+
+.scrollBar::-webkit-scrollbar {
+    width: 10px;
+
+
+}
+
+.scrollBar::-webkit-scrollbar-track {
+    background-color: rgba(201, 194, 241, 0.527);
+    border-radius: 0;
+
+}
+
+.scrollBar::-webkit-scrollbar-thumb {
+
+    border-radius: 0;
+    background-color: rgb(45, 0, 128);
+
 }
