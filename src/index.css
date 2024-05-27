@@ -858,14 +858,6 @@
   position: absolute;
   background-color: var(--col-black);
 }
-.bg__gradient {
-  width: 100%;
-  height: 100%;
-  position: fixed;
-  top: 90%;
-  background: linear-gradient(0deg, var(--col-red) 60%, rgba(0, 254, 42, 0) 100%);
-  opacity: 0.8;
-}
 .bg__sun {
   position: fixed;
   top: 90%;
